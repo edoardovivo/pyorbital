@@ -273,11 +273,21 @@ with w_out:
     ax = fig.subplots()
     plt.show()
 
+w_params = [w_a, w_e, w_i, w_Omega, w_omega, button1]
+w_r_v = [w_r_vec, w_v_vec, button2]
+w_constants_of_motion = [w_h_vec, w_e_vec, w_n_vec, button3]
+w_text = [w_p, w_E, w_Pi]
+
+w_accor = widgets.Accordion(children=[widgets.VBox(w_params), widgets.VBox(w_r_v), widgets.VBox(w_constants_of_motion)])
+w_accor.set_title(0, 'Orbital params')
+w_accor.set_title(1, 'Pos and vel')
+w_accor.set_title(2, 'Constants of motion')
 
 
-w_def = widgets.HBox([widgets.VBox([w_a, w_e, w_i,
-                            w_Omega, w_omega, w_nu, w_Pi,
-                            w_p, w_E,
-                            w_h_vec, w_e_vec, w_n_vec,
-                           w_v_vec, w_r_vec,
-                           widgets.HBox([button1, button2, button3])]), w_out_def])
+w_def = widgets.HBox([ widgets.VBox([w_E, w_p, w_Pi, w_nu, w_accor]) , w_out_def])
+#w_def = widgets.HBox([widgets.VBox([w_a, w_e, w_i,
+#                            w_Omega, w_omega, w_nu, w_Pi,
+#                            w_p, w_E,
+#                            w_h_vec, w_e_vec, w_n_vec,
+#                           w_v_vec, w_r_vec,
+#                           widgets.HBox([button1, button2, button3])]), w_out_def])
