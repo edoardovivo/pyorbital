@@ -122,6 +122,18 @@ w_v_vec = widgets.Text(
         disabled=False
         )
 
+w_r_coef = widgets.FloatText(
+        value=1.0,
+        description='Coef r:',
+        disabled=False
+        )
+
+w_v_coef = widgets.FloatText(
+        value=1.0,
+        description='Coef v:',
+        disabled=False
+        )
+
 
 w_E = widgets.FloatText(
         value=0,
@@ -172,12 +184,34 @@ def update_widgets(params):
     w_Pi.value = params["Pi"]
     w_E.value = params["E"]
 
+def default_widgets():
+    w_a.value = 1
+    w_e.value = 0.5
+    w_Omega.value = 0
+    w_omega.value = 0
+    w_i.value = 0
+    w_nu.value = 0
+    w_p.value = 0
+    w_e_vec.value = "[]"
+    w_h_vec.value = "[]"
+    w_n_vec.value = "[]"
+    w_r_vec.value = "[]"
+    w_v_vec.value = "[]"
+    w_Pi.value = 0
+    w_E.value = 0
+    w_r_coef = 1
+    w_v_coef = 1
 
-def plot_orbit(params, sim, fig):
+def plot_orbit(params, sim, fig, fr="params"):
 
-    sim.add(m=1e-5, e=params["e"], a=params["a"],
-            inc=params["i"], f=params["nu"],
-            Omega=params["Omega"], omega=params["omega"])
+    if (fr == "params"):
+        sim.add(m=1e-5, e=params["e"], a=params["a"],
+                inc=params["i"], f=params["nu"],
+                Omega=params["Omega"], omega=params["omega"])
+    else:
+        sim.add(m=1e-5, e=params["e"], a=params["a"],
+                inc=params["i"], f=params["nu"],
+                pomega=params["Pi"])
     plt.close(fig)
     fig = rebound.OrbitPlot(sim, unitlabel="[AU]", color=True, periastron=True, figsize=(10,8),
                             slices=False)
@@ -211,7 +245,7 @@ def from_params(b):
 
     with w_out:
         clear_output(wait=True)
-        plot_orbit(params, sim, fig)
+        plot_orbit(params, sim, fig, fr="params")
         plt.show()
 
 
@@ -222,6 +256,11 @@ def from_params(b):
 def from_r_v(b):
     r_vec = np.array(eval(w_r_vec.value))
     v_vec = np.array(eval(w_v_vec.value))
+    r_coef = w_r_coef.value
+    v_coef = w_v_coef.value
+
+    r_vec = r_coef*r_vec
+    v_vec = v_coef*v_vec
 
     orbit = Orbit()
     orbit.from_r_v(r_vec, v_vec)
@@ -230,7 +269,7 @@ def from_r_v(b):
 
     with w_out:
         clear_output(wait=True)
-        plot_orbit(params, sim, fig)
+        plot_orbit(params, sim, fig, fr="rv")
         plt.show()
 
 
@@ -250,16 +289,20 @@ def from_constants_of_motion(b):
 
     with w_out:
         clear_output(wait=True)
-        plot_orbit(params, sim, fig)
+        plot_orbit(params, sim, fig, fr="com")
         plt.show()
 
 def clear_plots(b):
+    global sim
     sim = rebound.Simulation()
+    sim.add(m=1)
     with w_out:
         clear_output(wait=True)
         fig = plt.figure(figsize=(10, 8))
         ax = fig.subplots()
         plt.show()
+    default_widgets()
+
 
 button1.on_click(from_params)
 button2.on_click(from_r_v)
@@ -274,7 +317,7 @@ with w_out:
     plt.show()
 
 w_params = [w_a, w_e, w_i, w_Omega, w_omega, button1]
-w_r_v = [w_r_vec, w_v_vec, button2]
+w_r_v = [w_r_vec, w_r_coef, w_v_vec, w_v_coef, button2]
 w_constants_of_motion = [w_h_vec, w_e_vec, w_n_vec, button3]
 w_text = [w_p, w_E, w_Pi]
 
