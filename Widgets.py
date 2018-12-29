@@ -153,6 +153,7 @@ w_Pi = widgets.FloatText(
 button1 = widgets.Button(description="From Params")
 button2 = widgets.Button(description="From position and velocity")
 button3 = widgets.Button(description="From constants of motion")
+button_clear = widgets.Button(description="Clear Plot")
 
 
 def update_widgets(params):
@@ -252,13 +253,25 @@ def from_constants_of_motion(b):
         plot_orbit(params, sim, fig)
         plt.show()
 
+def clear_plots(b):
+    sim = rebound.Simulation()
+    with w_out:
+        clear_output(wait=True)
+        fig = plt.figure(figsize=(10, 8))
+        ax = fig.subplots()
+        plt.show()
+
 button1.on_click(from_params)
 button2.on_click(from_r_v)
 button3.on_click(from_constants_of_motion)
+button_clear.on_click(clear_plots)
 
 w_out = widgets.Output()
+w_out_def = widgets.VBox([w_out, button_clear])
 with w_out:
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.subplots()
+    plt.show()
 
 
 
@@ -267,4 +280,4 @@ w_def = widgets.HBox([widgets.VBox([w_a, w_e, w_i,
                             w_p, w_E,
                             w_h_vec, w_e_vec, w_n_vec,
                            w_v_vec, w_r_vec,
-                           widgets.HBox([button1, button2, button3])]), w_out])
+                           widgets.HBox([button1, button2, button3])]), w_out_def])
