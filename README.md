@@ -1,6 +1,14 @@
 # pyorbital
 Jupyter notebook with widget to plot orbits and play with the parameters. There are 3 ways to plot an orbit: from orbit parameters, from position and velocity, and from constants of motion.
 
+We refer to the text "Fundamentals of Astrodynamics" by Bate, Mueller, and White, for the notation and the definition of the quantities. We especially refer to figure 2.3.1 of the text for a visual description of all the parameters.
+
+
+The three basis vectors, I,J,K, are the unit vectors of the coordinate system, in this case the Geocentric-Equatorial system. Their origin is the center of the Earth. I points toward the vernal equinox, K points toward the North Celestial Pole, and J points toward the first point of winter. I and J are in the fundamental plane, in this case the equatorial plane, and K is perpendicular to it. These coordinates do not rotate with the Earth, but their origin does remain at the Earth’s center as the Earth orbits the Sun. The three vectors h, e, and n describe the orbit. They share the same origin with the basis vectors. The specific angular momentum vector, h, is perpendicular to the orbital plane, the eccentricity vector, e , points toward perigee, and the node vector, n points toward the
+ascending node.
+
+
+
 ### From Orbital Parameters
 
 ![From_params](https://github.com/edoardovivo/pyorbital/blob/develop/img/from_params.png)
@@ -27,4 +35,4 @@ Here, you can specify:
 
 * h: the angular momentum
 * e_vec: the vector eccentricity
-* n_vec
+* n_vec: the line of nodes
